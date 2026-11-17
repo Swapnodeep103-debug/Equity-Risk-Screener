@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ticker Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Ticker Board</h1>
+    <p>Loads the JSON report produced by <span class="num">main.py</span> or <span class="num">run_universe.py</span>. Nothing is uploaded anywhere &mdash; the file is read locally in your browser.</p>
+  </div>
+  <div class="load-row">
+    <input type="file" id="file-input" accept="application/json">
+    <button class="load-btn" id="load-btn">Load report.json</button>
+    <span id="file-name"></span>
+  </div>
+</header>
+
+<main>
+  <div class="run-panel" id="run-panel" style="display:none;">
+    <h2>Run an analysis</h2>
+    <div class="domain-grid" id="domain-grid"></div>
+    <div style="margin-bottom:12px;">
+      <button class="link-btn" id="select-all">select all</button> &middot;
+      <button class="link-btn" id="select-none">clear</button>
+    </div>
+    <div class="run-row">
+      <input type="text" id="custom-tickers" placeholder="Extra tickers, comma separated (e.g. AAPL, INFY.NS)">
+      <label><input type="checkbox" id="use-llm"> LLM risk overlay (slow, needs Ollama)</label>
+      <button class="load-btn" id="run-btn">Run analysis</button>
+    </div>
+    <div class="progress" id="progress"><div id="progress-bar"></div></div>
+    <div id="run-status"></div>
+  </div>
+  <div id="empty-state">
+    <div class="glyph">&#9673;</div>
+    <div>No report yet. Pick domains above and run an analysis, or load a saved report.json.</div>
+  </div>
+
+  <div id="content" style="display:none;">
+    <div class="stat-strip" id="stat-strip"></div>
+
+    <div class="controls">
+      <select id="domain-filter"><option value="">All domains</option></select>
+      <select id="band-filter">
+        <option value="">All score bands</option>
+        <option value="strong">Strong (70&ndash;100)</option>
+        <option value="moderate">Moderate (40&ndash;69)</option>
+        <option value="weak">Weak (0&ndash;39)</option>
+      </select>
+      <input type="text" id="search" placeholder="Search ticker&hellip;">
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th data-key="ticker">Ticker</th>
+          <th data-key="domains">Domain</th>
+          <th data-key="score">Score</th>
+          <th data-key="price">Price</th>
+          <th data-key="trend">Trend</th>
+          <th data-key="sortino">Sortino</th>
+          <th data-key="drawdown">Max DD</th>
+          <th data-key="flagCount">Flags</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+
+    <footer id="disclaimer"></footer>
+  </div>
+</main>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
